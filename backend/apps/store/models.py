@@ -35,8 +35,8 @@ class Product(models.Model):
     num_available = models.IntegerField(default=1)
     num_visits = models.IntegerField(default=0)
     last_visit = models.DateTimeField(blank=True, null=True, default=timezone.now)
-    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
-    thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
+    thumbnail = models.ImageField(blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -65,11 +65,25 @@ def product_detail_view(request, category_slug, slug):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CategoryDetailView(generics.ListAPIView):
+class CategoryDetailAPIView(generics.GenericAPIView):
     serializer_class = ProductSerializer
     pagination_class = PageNumberPagination
 
-    def get_queryset(self):
-        slug = self.kwargs['slug']
+    def get(self, request, slug, *args, **kwargs):
         category = get_object_or_404(Category, slug=slug)
-        return category.products.filter(parent=None)
+        products = category.products.filter(parent=None)
+
+        paginator = self.pagination_class()
+        paginated_products = paginator.paginate_queryset(products, request)
+
+        serialized_products = self.get_serializer(paginated_products, many=True)
+        serialized_category = CategorySerializer(category)
+
+        return paginator.get_paginated_response({
+            'category': serialized_category.data,
+            'products': serialized_products.data
+        })
+
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.filter(parent=None)
+    serializer_class = CategorySerializer

@@ -8,8 +8,8 @@ from apps.store.serializers import ProductSerializer, CategorySerializer
 
 class IndexView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
-        featured_products = Product.objects.get(is_fetaured=True)
-        featured_categories = Category.objects.get(is_fetaured=True)
+        featured_products = Product.objects.filter(is_featured=True)
+        featured_categories = Category.objects.filter(is_featured=True)
         popular_products = Product.objects.all().order_by('-num_visits')[:4]
         recently_viewed_products = Product.objects.all().order_by('-last_visit')[:4]
 
