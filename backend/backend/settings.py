@@ -182,4 +182,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'exp://192.168.0.100:8081'
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+
+CORS_ALLOW_HEADERS = [
+    'Authorization',
+    'Content-Type',
+    'X-CSRFToken',
+    'Accept',
+]
+
