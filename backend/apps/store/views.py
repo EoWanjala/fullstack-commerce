@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from .models import Product, Category, ProductReview
-from .serializers import ProductSerializer, ProductDetailSerializer, CategorySerializer, ProductReviewSerializer
+from .serializers import ProductSerializer, ProductDetailSerializer, CategorySerializer, ProductReviewSerializer, RelatedProductSerializer
 
 class ProductSearchView(generics.ListAPIView):
     serializer_class = ProductSerializer
@@ -53,16 +53,24 @@ def product_detail_view(request, category_slug, slug):
         else:
             return Response({"detail": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
 
+    # Fetch related products
     related_products = list(product.category.products.filter(parent=None).exclude(id=product.id))
     if len(related_products) >= 3:
         related_products = random.sample(related_products, 3)
+
+    # Serialize related products
+    related_products_serializer = RelatedProductSerializer(related_products, many=True)
 
     if product.parent:
         parent_slug = product.parent.slug
         return redirect('product_detail', category_slug=category_slug, slug=parent_slug)
 
+    # Include related products in the response
     serializer = ProductDetailSerializer(product)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    response_data = serializer.data
+    response_data['related_products'] = related_products_serializer.data
+
+    return Response(response_data, status=status.HTTP_200_OK)
 
 
 class CategoryDetailAPIView(generics.GenericAPIView):
@@ -73,14 +81,20 @@ class CategoryDetailAPIView(generics.GenericAPIView):
         category = get_object_or_404(Category, slug=slug)
         products = category.products.filter(parent=None)
 
-        paginator = self.pagination_class()
-        paginated_products = paginator.paginate_queryset(products, request)
+        # Use DRF's built-in pagination method
+        paginated_products = self.paginate_queryset(products)
 
-        serialized_products = self.get_serializer(paginated_products, many=True)
-        serialized_category = CategorySerializer(category)
+        if paginated_products is not None:
+            serialized_products = self.get_serializer(paginated_products, many=True)
+            return self.get_paginated_response({
+                'category': CategorySerializer(category).data,
+                'products': serialized_products.data
+            })
 
-        return paginator.get_paginated_response({
-            'category': serialized_category.data,
+        # If pagination is not needed, serialize all products
+        serialized_products = self.get_serializer(products, many=True)
+        return Response({
+            'category': CategorySerializer(category).data,
             'products': serialized_products.data
         })
 

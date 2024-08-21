@@ -97,9 +97,10 @@ export const getProductDetail = (category_slug, slug) => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_DETAIL_REQUEST });
 
-        const { data } = await axios.get(`${API_URL}/store/product/${category_slug}/${slug}/`);
+        const { data } = await axios.get(`${API_URL}/store/${category_slug}/${slug}/`);
 
         dispatch({ type: PRODUCT_DETAIL_SUCCESS, payload: data });
+        // console.log("Product detail action: ", data)
 
     } catch (error) {
         dispatch({ type: PRODUCT_DETAIL_FAIL, payload: error.message });
@@ -111,7 +112,7 @@ export const submitProductReview = (category_slug, slug, reviewData) => async (d
     try {
         dispatch({ type: PRODUCT_REVIEW_REQUEST });
 
-        const { data } = await axios.post(`${API_URL}/store/product/${category_slug}/${slug}/`, reviewData);
+        const { data } = await axios.post(`${API_URL}/store/${category_slug}/${slug}/`, reviewData);
 
         dispatch({ type: PRODUCT_REVIEW_SUCCESS, payload: data });
 

@@ -90,7 +90,7 @@ const Navbar = () => {
     <>
         <nav className='w-full flex items-center justify-between py-3 top-0 z-40 bg-primary'>
             <Link to={'/'} className='flex items-center gap-2 mx-3'>
-                <img src='1-02.png' alt='Logo' className='w-10 rounded-full'/>
+                <img src='/1-02.png' alt='Logo' className='w-10 rounded-full'/>
             </Link>
             
 
