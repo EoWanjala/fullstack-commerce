@@ -11,6 +11,10 @@ import {
 } from "./productsReducer"
 
 import {
+    cartReducer
+} from "./cartReducer"
+
+import {
     userLoginReducer,
     userRegisterReducer,
 } from "./userReducer"
@@ -25,6 +29,7 @@ const allReducers = combineReducers({
     productReviewReducer,
     userLoginReducer,
     userRegisterReducer,
+    cartReducer,
 })
 
 export default allReducers

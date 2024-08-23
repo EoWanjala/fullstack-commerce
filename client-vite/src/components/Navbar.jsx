@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { getCategoryDetail } from '../actions/productsActions'
 import { listCategories } from '../actions/productsActions'
+import Cart from './Cart'
 
 const Navbar = () => {
     const dispatch = useDispatch()
@@ -121,14 +122,17 @@ const Navbar = () => {
                     </svg>
                     Login
                 </Link>
+
+                <Cart />
+                
                 <div className="lg:hidden">
-                <button className="navbar-burger flex items-center text-white p-3">
-                    <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Mobile menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-                    </svg>
-                </button>
-		    </div>
+                    <button className="navbar-burger flex items-center text-white p-3">
+                        <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>Mobile menu</title>
+                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             
         </nav>

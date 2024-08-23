@@ -65,7 +65,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
-SESSION_COOKIE_AGE = 86400
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # To use database-backed sessions
+SESSION_COOKIE_AGE = 1209600  # Two weeks, adjust as needed
+SESSION_SAVE_EVERY_REQUEST = True  # Save session data on every request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
 CART_SESSION_ID = 'cart'
 
 TEMPLATES = [

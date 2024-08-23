@@ -24,6 +24,7 @@ urlpatterns = [
     path('home/', include("apps.core.urls")),
     path('store/', include('apps.store.urls')),
     path('userprofile/', include('apps.userprofile.urls')),
+    path('api/', include("apps.cart.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

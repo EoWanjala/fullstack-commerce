@@ -24,11 +24,12 @@ class ProductSerializer(serializers.ModelSerializer):
     reviews = ProductReviewSerializer(many=True, read_only=True)
     rating = serializers.SerializerMethodField()
     thumbnail = serializers.SerializerMethodField()
+    variants = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = [
-            'id', 'category', 'title', 'slug', 'description',
+            'id', 'category', 'title', 'slug', 'description', 'variants',
             'price', 'is_featured', 'num_available', 'num_visits', 
             'last_visit', 'image', 'thumbnail', 'date_added', 
             'images', 'reviews', 'rating'
@@ -39,6 +40,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_thumbnail(self, obj):
         return obj.get_thumbnail()
+    
+    def get_variants(self, obj):
+        variants = obj.variants.all()
+        return ProductSerializer(variants, many=True).data
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -65,7 +70,6 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         return obj.get_thumbnail()
     
     def get_variants(self, obj):
-        # Get all variants where this product is the parent
         variants = obj.variants.all()
         return ProductSerializer(variants, many=True).data
     

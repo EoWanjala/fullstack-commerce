@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getProductDetail } from '../actions/productsActions'
 import { FeaturedProducts, Spinner } from '../components'
+import { addToCart } from '../actions/cartActions'
+import { fetchCart } from '../actions/cartActions'
 
 const ProductDetail = () => {
     const { category_slug, slug } = useParams()
@@ -20,6 +22,12 @@ const ProductDetail = () => {
     useEffect(() => {
         dispatch(getProductDetail(category_slug, slug))
     }, [category_slug, slug])
+
+    const handleAddToCart = (productId) => {
+        dispatch(addToCart(productId)); // Pass productId correctly
+      };
+    
+    
 
     return (
         <div className='max-w-7xl mx-auto pb-20 pt-10'>
@@ -60,7 +68,9 @@ const ProductDetail = () => {
                             <p className='text-lg font-medium text-gray-600 tracking-wide'>{product.description}</p>
                             <p className='text-lg font-medium tracking-wide my-2'>Available: {product.num_available}</p>
 
-                            <button className='bg-grade px-2 py-1.5 text-white rounded-md hover:bg-red-400 mt-2'>Add to Cart</button>
+                            <button
+                           onClick={() => handleAddToCart(product.id)}
+                            className='bg-grade px-2 py-1.5 text-white rounded-md hover:bg-red-400 mt-2'>Add to Cart</button>
                         </div>
 
                         {/* Render Product Variants */}
@@ -74,7 +84,9 @@ const ProductDetail = () => {
                                             <h3 className='font-medium'>{variant.title}</h3>
                                             <p className='text-2xl font-bold'>Price: KES {variant.price}</p>
                                             <p className='text-md font-medium'>Available: {variant.num_available}</p>
-                                            <button className='bg-grade px-2 py-1.5 text-white rounded-md hover:bg-red-400'>Add to Cart</button>
+                                            <button
+                                            onClick={handleAddToCart(variant.id)}
+                                            className='bg-grade px-2 py-1.5 text-white rounded-md hover:bg-red-400'>Add to Cart</button>
                                         </div>
                                     ))}
                                 </div>
