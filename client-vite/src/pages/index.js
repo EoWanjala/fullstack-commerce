@@ -2,10 +2,14 @@ import Home from "./Home";
 import CategoryDetail from "./CategoryDetail";
 import ProductDetail from "./ProductDetail";
 import CartPage from "./CartPage";
+import Login from "./Login";
+import Register from "./Register";
 
 export {
     Home,
     CategoryDetail,
     ProductDetail,
-    CartPage
+    CartPage,
+    Login,
+    Register
 }

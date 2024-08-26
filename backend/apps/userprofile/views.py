@@ -38,7 +38,7 @@ class UserRegisterView(APIView):
             last_name=last_name,
             password=make_password(password),
         )
-        serializer = UserRegisterSerializer
+        serializer = UserRegisterSerializer(user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
