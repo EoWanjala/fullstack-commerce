@@ -21,36 +21,39 @@ import {
 const API_URL = import.meta.env.VITE_BACKEND_API;
 
 // cartActions.js
-export const addToCart = (productId, quantity = 1 , updateQuantity = false) => async (dispatch) => {
+export const addToCart = (productId, quantity = 1, updateQuantity = false) => async (dispatch) => {
     try {
-      dispatch({ 
-        type: CART_ADD_ITEM_REQUEST, 
-        payload: { productId, quantity, updateQuantity } 
-      });
-      
-      const response = await axios.post(`${API_URL}/api/cart/`, { 
-        product_id: productId, 
-        quantity, 
-        update_quantity: updateQuantity 
-      });
-      console.log("Response date: ", response)
-  
-      if (response.data) {
         dispatch({
-          type: CART_ADD_ITEM_SUCCESS,
-          payload: response.data,
+            type: CART_ADD_ITEM_REQUEST,
+            payload: { productId, quantity, updateQuantity }
         });
-      } else {
-        throw new Error('No data returned from the API');
-      }
+  
+        // Sending request to the backend
+        const response = await axios.post(`${API_URL}/api/cart/`, {
+            product_id: productId,
+            quantity,
+            update_quantity: updateQuantity
+        });
+  
+        console.log("Response data addtoCart: ", response.data);  // Check the structure of the response
+  
+        if (response.data.cart) {
+            dispatch({
+                type: CART_ADD_ITEM_SUCCESS,
+                payload: response.data.cart, // Dispatch the updated cart data
+            });
+        } else {
+            throw new Error('Unexpected response format');
+        }
     } catch (error) {
-      console.error("Error adding to cart: ", error);
-      dispatch({
-        type: CART_ADD_ITEM_FAIL,
-        payload: error.response ? error.response.data : error.message,
-      });
+        console.error("Error adding to cart: ", error.response ? error.response.data : error.message);
+        dispatch({
+            type: CART_ADD_ITEM_FAIL,
+            payload: error.response ? error.response.data : error.message,
+        });
     }
   };
+
   
 export const removeFromCart = (productId) => async (dispatch) => {
     try {
@@ -91,16 +94,17 @@ export const clearCart = () => async(dispatch) => {
 
 export const fetchCart = () => async (dispatch) => {
     try {
-        dispatch({ type: CART_FETCH_REQUEST });
-        const { data } = await axios.get(`${API_URL}/api/cart/`);
-        dispatch({
-            type: CART_FETCH_SUCCESS,
-            payload: data, 
-        });
+      dispatch({ type: CART_FETCH_REQUEST });
+      const response = await axios.get(`${API_URL}/api/cart/`);
+      console.log("Response data: ", response.data);
+      dispatch({
+        type: CART_FETCH_SUCCESS,
+        payload: response.data.cart, // Ensure payload is the cart array
+      });
     } catch (error) {
-        dispatch({
-            type: CART_FETCH_FAIL,
-            payload: error.response ? error.response.data : error.message,
-        });
+      dispatch({
+        type: CART_FETCH_FAIL,
+        payload: error.response ? error.response.data : error.message,
+      });
     }
-};
+  };

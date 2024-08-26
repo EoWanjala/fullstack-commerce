@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from django.http import JsonResponse
+
 from django.conf import settings
 from apps.store.serializers import ProductSerializer
 from apps.store.models import Product
@@ -14,46 +16,43 @@ class CartView(APIView):
         cart_data = []
 
         for item in cart:
-            product = item['product']
-            url = f'/{product.category.slug}/{product.slug}/'
-            product_data = ProductSerializer(product).data  # You can serialize the product here if needed
-            print("Serialized Product Data: ", product_data)  
-            
-            cart_data.append({
-                'id': product.id,
-                'title': product.title,
-                'price': str(product.price),
+            product_data = {
+                'id': item['id'],  # From the serialized data
+                'title': item['title'],
+                'price': str(item['price']),
                 'quantity': item['quantity'],
-                'url': url,
+                'url': f'/{item.get("category_slug")}/{item.get("slug")}/',  # Use serialized fields
                 'total_price': str(item['total_price']),
-                'thumbnail': product.get_thumbnail(),
-                'num_available': product.num_available
-            })
+                'thumbnail': item.get('thumbnail'),
+                'num_available': item.get('num_available')
+            }
+
+            cart_data.append(product_data)
 
         total_quantity = cart.get_total_length()
         total_cost = cart.get_total_cost()
 
-        # Get user data if authenticated
-        first_name = request.user.first_name if request.user.is_authenticated else ''
-        last_name = request.user.last_name if request.user.is_authenticated else ''
-        email = request.user.email if request.user.is_authenticated else ''
-        address = request.user.address if request.user.is_authenticated else ''
-        zipcode = request.user.zipcode if request.user.is_authenticated else ''
-        place = request.user.place if request.user.is_authenticated else ''
-        phone = request.user.phone if request.user.is_authenticated else ''
+        user_data = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+            'address': request.user.address,
+            'zipcode': request.user.zipcode,
+            'place': request.user.place,
+            'phone': request.user.phone,
+        } if request.user.is_authenticated else {}
 
-        return Response({
+        response_data = {
             'cart': cart_data,
             'total_quantity': total_quantity,
             'total_cost': total_cost,
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'phone': phone,
-            'address': address,
-            'zipcode': zipcode,
-            'place': place,
-        }, status=status.HTTP_200_OK)
+            **user_data,
+        }
+
+        print("Response data: ", response_data)
+        return JsonResponse(response_data, status=status.HTTP_200_OK)
+
+
 
 
     
@@ -72,9 +71,33 @@ class CartView(APIView):
             cart.add(product=product, quantity=1, update_quantity=False)
         else:
             cart.add(product=product, quantity=quantity, update_quantity=True)
-        print("Added to cart")
 
-        return Response({"success": "Product added/updated in cart"}, status=status.HTTP_200_OK)
+        # Debugging the cart contents after adding
+        cart_data = []
+        for item in cart:
+            cart_data.append({
+                'id': item['id'],
+                'title': item['title'],
+                'price': str(item['price']),
+                'quantity': item['quantity'],
+                'url': f'/{item.get("category_slug")}/{item.get("slug")}/',
+                'total_price': str(item['total_price']),
+                'thumbnail': item.get('thumbnail'),
+                'num_available': item.get('num_available')
+            })
+        
+        total_quantity = cart.get_total_length()
+        total_cost = cart.get_total_cost()
+
+        response_data = {
+            'cart': cart_data,
+            'total_quantity': total_quantity,
+            'total_cost': total_cost,
+        }
+
+        print("Response data after adding item: ", response_data)
+        return Response(response_data, status=status.HTTP_200_OK)
+
     
     def delete(self, request):
         cart = Cart(request)

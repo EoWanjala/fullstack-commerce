@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 const Cart = () => {
     const cartReducer = useSelector((state) => state.cartReducer)
     const { cartItems } = cartReducer
+    console.log("Cart Items Reducer State: ", cartItems)
   return (
     <Link to={'/cart'}>
         <div className='mx-3 relative'>

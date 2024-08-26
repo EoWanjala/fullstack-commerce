@@ -36,22 +36,22 @@ export const cartReducer = (state = initialState, action) => {
             };
 
         case CART_ADD_ITEM_SUCCESS:
-            const item = action.payload;
-            const existItem = state.cartItems.find(x => x.id === item.id);
-            
+            const newItem = action.payload[0]; // Assuming response is an array with one object
+            const existItem = state.cartItems.find(x => x.id === newItem.id);
+
             if (existItem) {
                 return {
                     ...state,
                     loading: false,
                     cartItems: state.cartItems.map(x => 
-                        x.id === existItem.id ? {...x, quantity: item.quantity} : x  // Use the quantity from the backend
+                        x.id === existItem.id ? { ...x, quantity: newItem.quantity } : x
                     ),
                 };
             } else {
                 return {
                     ...state,
                     loading: false,
-                    cartItems: [...state.cartItems, item],
+                    cartItems: [...state.cartItems, newItem],
                 };
             }
             
@@ -73,7 +73,7 @@ export const cartReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                cartItems: action.payload.cart,
+                cartItems: action.payload || [],
             };
 
         case CART_ADD_ITEM_FAIL:

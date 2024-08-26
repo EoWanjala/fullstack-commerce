@@ -39,7 +39,10 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.get_rating()
 
     def get_thumbnail(self, obj):
-        return obj.get_thumbnail()
+        # Check if thumbnail exists and return its URL
+        if obj.thumbnail:
+            return obj.thumbnail.url
+        return None
     
     def get_variants(self, obj):
         variants = obj.variants.all()
