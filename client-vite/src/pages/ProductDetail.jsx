@@ -24,8 +24,13 @@ const ProductDetail = () => {
     }, [category_slug, slug])
 
     const handleAddToCart = (productId) => {
-        dispatch(addToCart(productId, 1, false)); // Add 1 quantity of product to cart
+        dispatch(addToCart(productId, 1, false)); 
     };
+
+    function numberWithCommas(x) {
+        if (x === undefined || x === null) return "0"; 
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     
     return (
         <div className='max-w-7xl mx-auto pb-20 pt-10'>
@@ -61,7 +66,7 @@ const ProductDetail = () => {
                             </p>
                         </div>
                         <div className='pt-5'>
-                        <h1 className='text-3xl font-bold'>KES {product.price}</h1>
+                        <h1 className='text-3xl font-bold'>KES {numberWithCommas(product.price)}</h1>
 
                             <p className='text-lg font-medium text-gray-600 tracking-wide'>{product.description}</p>
                             <p className='text-lg font-medium tracking-wide my-2'>Available: {product.num_available}</p>
@@ -80,7 +85,7 @@ const ProductDetail = () => {
                                         <div key={variant.id} className='border p-4 rounded-lg shadow-sm'>
                                             <img src={API_URL + variant.thumbnail} alt={variant.title} className='w-full mb-2'/>
                                             <h3 className='font-medium'>{variant.title}</h3>
-                                            <p className='text-2xl font-bold'>Price: KES {variant.price}</p>
+                                            <p className='text-2xl font-bold'>Price: KES {numberWithCommas(product.price)}</p>
                                             <p className='text-md font-medium'>Available: {variant.num_available}</p>
                                             <button onClick={() => handleAddToCart(variant.id)} className='bg-grade px-2 py-1.5 text-white font-medium rounded-lg hover:bg-red-400'>
                                             Add to Cart
