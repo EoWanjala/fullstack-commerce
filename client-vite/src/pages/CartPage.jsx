@@ -101,7 +101,7 @@ const CartPage = () => {
                     </table>
 
                     
-                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 mt-10 pb-20 mb-10'>
+                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 mt-10 pb-20 mb-10 text-center'>
                         <div className='cols-span-2'>
                             <div className='flex items-center justify-between p-4 rounded-lg w-full'>
                                 <input type='text' placeholder='Coupon code'
