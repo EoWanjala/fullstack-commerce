@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, addToCart, removeFromCart } from '../actions/cartActions';
 import { Link } from 'react-router-dom';
+import { Spinner } from "../components"
 
 const API_URL = import.meta.env.VITE_BACKEND_API;
 
@@ -38,6 +39,7 @@ const CartPage = () => {
     const calculateTotalPrice = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     };
+
     function numberWithCommas(x) {
         if (x === undefined || x === null) return "0"; 
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -47,11 +49,16 @@ const CartPage = () => {
         <div className='max-w-7xl mx-auto pt-10'>
             <h1 className='text-4xl font-bold mb-3'>Your Cart</h1>
             {loading ? (
-                <p>Loading...</p>
+                <Spinner />
             ) : error ? (
                 <p>Error: {error}</p>
             ) : cartItems.length === 0 ? (
-                <p className='text-4xl font-bold'>No items added to the cart.</p>
+                <div className="text-center">
+                    <p className='text-4xl font-bold'>Cart is empty</p>
+                    <Link to="/" className="text-lg text-primary underline">
+                        Continue Shopping
+                    </Link>
+                </div>
             ) : (
                 <div className='relative overflow-x-auto'>
                     <table className='w-full text-sm text-left rtl:text-right rounded-lg'>
@@ -66,11 +73,8 @@ const CartPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cartItems.map((item) => {
-                                // const imageUrl = `${API_URL}/${item.thumbnail}`;
-                                // console.log("Image URL:", imageUrl);
-                                return (
-                                    <tr key={item.id}>
+                            {cartItems.map((item) => (
+                                <tr key={item.id}>
                                     <td className='py-3 px-6'>
                                         <img
                                             src={`${API_URL}/${item.thumbnail}`}
@@ -81,7 +85,7 @@ const CartPage = () => {
                                     <td className='py-3 px-6 text-lg font-medium'>{item.title}</td>
                                     <td className='py-3 px-6 text-lg font-medium'>KES {numberWithCommas(item.price)}</td>
                                     <td className='py-3 px-6 text-lg font-medium'>
-                                        <button className='bg-grade text-white px-1.5 rounded-full' onClick={() => decreaseQuantity(item)}>-</button>
+                                        <button className='bg-gray-300 text-white px-1.5 rounded-full' onClick={() => decreaseQuantity(item)}>-</button>
                                         <span className='mx-2'>{item.quantity}</span>
                                         <button className='bg-blue-600 text-white px-1.5 rounded-full' onClick={() => increaseQuantity(item)}>+</button>
                                     </td>
@@ -89,18 +93,16 @@ const CartPage = () => {
                                     <td className='py-3 px-6'>
                                         <button
                                             onClick={() => handleRemoveItem(item.id)}
-                                            className='bg-grade px-1.5 py-1 rounded-lg text-white hover:bg-red-400'
+                                            className='bg-red-500 px-1.5 py-1 rounded-lg text-white hover:bg-red-400'
                                         >
                                             Remove
                                         </button>
                                     </td>
                                 </tr>
-                                )
-                            })}
+                            ))}
                         </tbody>
                     </table>
 
-                    
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 mt-10 pb-20 mb-10 text-center'>
                         <div className='cols-span-2'>
                             <div className='flex items-center justify-between p-4 rounded-lg w-full'>
@@ -118,7 +120,7 @@ const CartPage = () => {
                                     <strong className='text-lg'>KES {numberWithCommas(calculateTotalPrice())}</strong>
                                 </div>
                                 <div className='mt-5'>
-                                    <Link className='px-10 py-3 bg-primary text-white w-full rounded-full uppercase text-lg tracking-wide hover:bg-primary/65'>
+                                    <Link to="/checkout" className='px-10 py-3 bg-primary text-white w-full rounded-full uppercase text-lg tracking-wide hover:bg-primary/65'>
                                         Proceed to Checkout
                                     </Link>
                                 </div>

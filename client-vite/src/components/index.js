@@ -2,6 +2,7 @@ import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import FeaturedProducts from "./FeaturedProducts";
 import Cart from "./Cart";
+import Myaccount from "./Myaccount";
 
 
 export{
@@ -9,4 +10,5 @@ export{
     Spinner,
     FeaturedProducts,
     Cart,
+    Myaccount
 }
