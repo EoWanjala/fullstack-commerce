@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../actions/cartActions';
 import { initiatePayment } from '../actions/paymentAction';
@@ -13,12 +13,23 @@ const CartPage = () => {
 
     const cartReducer = useSelector((state) => state.cartReducer);
     const { cartItems, loading, error } = cartReducer;
+    console.log("Cart Items: ", cartItems)
 
     const paymentReducer = useSelector((state) => state.initiatePaymentReducer);
     const { paymentData, loading: paymentLoading, error: paymentError } = paymentReducer;
+    console.log("Payment data: ", paymentData)
 
     const userLoginReducer = useSelector(state => state.userLoginReducer);
     const { userInfo } = userLoginReducer;
+
+    const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [address, setAddress] = useState("");
+    const [phone, setPhone] = useState("");
+    const [place, setPlace] = useState("")
+    const [zipcode, setZipcode] = useState("")
 
     const increaseQuantity = (item) => {
         dispatch(addToCart(item.id, item.quantity + 1, true));
@@ -42,7 +53,8 @@ const CartPage = () => {
         return cartItems.reduce((total, item) => total + item.quantity, 0);
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = (e) => {
+        e.preventDefault();
         const orderData = {
             items: cartItems.map(item => ({
                 id: item.id,
@@ -56,17 +68,18 @@ const CartPage = () => {
             })),
             total_cost: calculateTotalPrice(),
             total_quantity: calculateTotalQuantity(),
-            first_name: userInfo.first_name,
-            last_name: userInfo.last_name,
-            email: userInfo.email,
-            address: userInfo.address || 'N/A',
-            zipcode: userInfo.zipcode || '0000',
-            place: userInfo.place || 'Unknown',
-            phone: userInfo.phone || '0000000000',
+            first_name: userInfo.first_name || firstName,
+            last_name: userInfo.last_name || lastName,
+            email: userInfo.email || email,
+            address: userInfo.address || address,
+            zipcode: userInfo.zipcode || zipcode,
+            place: userInfo.place || place,
+            phone: userInfo.phone || phone,
         };
     
         console.log("Order Data: ", orderData);
         dispatch(initiatePayment({ order: orderData }));
+        navigate('/checkout');
     };
     
     
@@ -151,13 +164,74 @@ const CartPage = () => {
                                     <strong className='text-lg'>KES {numberWithCommas(calculateTotalPrice())}</strong>
                                 </div>
                                 <div className='mt-5 mx-3'>
-                                <button 
-                                    onClick={handleCheckout} 
-                                    className={`px-10 py-3 ${cartItems.length === 0 ? 'bg-gray-300' : 'bg-primary hover:bg-primary/80'} text-white w-full rounded-full uppercase text-lg tracking-wide`}
-                                    disabled={cartItems.length === 0}  
-                                >
-                                    Proceed to Checkout
-                                </button>
+                                    <form onSubmit={handleCheckout}>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>First Name</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='first name'
+                                            placeholder={userInfo.first_name}
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}/>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>Last Name</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='first name'
+                                            placeholder={userInfo.last_name}
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}/>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>Email</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='email'
+                                            placeholder={userInfo.email}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}/>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>Address</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='first name'
+                                            placeholder={userInfo.address|| 'N/A'}
+                                            value={address}
+                                            onChange={(e) => setAddress(e.target.value)}/>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>Zipcode</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='first name'
+                                            placeholder={userInfo.zipcode || 'N/A'}
+                                            value={zipcode}
+                                            onChange={(e) => setZipcode(e.target.value)}/>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>Place</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='first name'
+                                            placeholder={userInfo.place || 'N/A'}
+                                            value={place}
+                                            onChange={(e) => setPlace(e.target.value)}/>
+                                        </div>
+                                        <div className='mb-5'>
+                                            <label className='block mb-2 text-sm font-medium'>Phone Number</label>
+                                            <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
+                                            type='phonenmber'
+                                            placeholder={userInfo.phone || 'N/A'}
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}/>
+                                        </div>
+                                        
+                                        <button 
+                                        onClick={handleCheckout} 
+                                        className={`px-10 py-3 ${cartItems.length === 0 ? 'bg-gray-300' : 'bg-primary hover:bg-primary/80'} text-white w-full rounded-full uppercase text-lg tracking-wide`}
+                                        disabled={cartItems.length === 0}  
+                                        >
+                                            Proceed to Checkout
+                                        </button>
+                                    </form>
+                                   
+                               
                                 </div>
                             </div>
                         </div>

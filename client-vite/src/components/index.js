@@ -3,6 +3,7 @@ import Spinner from "./Spinner";
 import FeaturedProducts from "./FeaturedProducts";
 import Cart from "./Cart";
 import Myaccount from "./Myaccount";
+import orderform from "./orderform";
 
 
 export{
@@ -10,5 +11,6 @@ export{
     Spinner,
     FeaturedProducts,
     Cart,
-    Myaccount
+    Myaccount,
+    orderform
 }

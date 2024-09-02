@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Navbar } from "./components"
-import { Home, CategoryDetail, ProductDetail, CartPage, Login, Register, Checkout } from "./pages"
+import { Home, CategoryDetail, ProductDetail, CartPage, Login, Register, Checkout, PaymentVerification } from "./pages"
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} exact />
         <Route path="/register" element={<Register />} exact />
         <Route path ="/checkout" element= { <Checkout/>} exact />
+        <Route path ="/verify-payment/:ref" element= { <PaymentVerification />} exact />
       </Routes>
     </Router>
       

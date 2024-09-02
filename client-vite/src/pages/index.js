@@ -5,6 +5,7 @@ import CartPage from "./CartPage";
 import Login from "./Login";
 import Register from "./Register";
 import Checkout from "./Checkout";
+import PaymentVerification from "./PaymentVerification";
 
 export {
     Home,
@@ -13,5 +14,6 @@ export {
     CartPage,
     Login,
     Register,
-    Checkout
+    Checkout,
+    PaymentVerification
 }

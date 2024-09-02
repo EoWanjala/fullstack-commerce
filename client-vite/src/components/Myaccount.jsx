@@ -14,6 +14,7 @@ const Myaccount = () => {
 
     const getAllOrdersReducer = useSelector((state)=> state.getAllOrdersReducer)
     const {orders, loading:loadingOrders, error:errorOrders} = getAllOrdersReducer
+    console.log("Orders: ", orders)
 
     useEffect(()=>{
         dispatch(getOrders())
