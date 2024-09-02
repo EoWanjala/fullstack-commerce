@@ -2,9 +2,13 @@ from rest_framework import serializers
 from .models import Category, Product, ProductImage, ProductReview
 
 class CategorySerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
     class Meta:
         model = Category
-        fields = ['id', 'parent', 'title', 'slug', 'ordering', 'is_featured']
+        fields = ['id', 'parent', 'title', 'slug', 'ordering', 'is_featured', 'url']
+
+    def get_url(self, obj):
+        return obj.get_absolute_url()
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,6 +29,7 @@ class ProductSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     thumbnail = serializers.SerializerMethodField()
     variants = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -32,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'id', 'category', 'title', 'slug', 'description', 'variants',
             'price', 'is_featured', 'num_available', 'num_visits', 
             'last_visit', 'image', 'thumbnail', 'date_added', 
-            'images', 'reviews', 'rating'
+            'images', 'reviews', 'rating', 'url'
         ]
 
     def get_rating(self, obj):
@@ -47,6 +52,9 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_variants(self, obj):
         variants = obj.variants.all()
         return ProductSerializer(variants, many=True).data
+    
+    def get_url(self, obj):
+        return obj.get_absolute_url()
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)

@@ -36,6 +36,7 @@ export const addToCart = (productId, quantity = 1, updateQuantity = false) => as
         });
   
         console.log("Response data addtoCart: ", response.data);  // Check the structure of the response
+        console.log("Response data addtoCart response: ", response);  // Check the structure of the response
   
         if (response.data.cart) {
             dispatch({
@@ -55,23 +56,23 @@ export const addToCart = (productId, quantity = 1, updateQuantity = false) => as
   };
 
   
-export const removeFromCart = (productId) => async (dispatch) => {
-    try {
-        dispatch({ type: CART_REMOVE_ITEM_REQUEST, payload: { productId } });
-        const { data } = await axios.delete(`${API_URL}/api/cart/`, {
-            data: { product_id: productId }
-        });
-        dispatch({
-            type: CART_REMOVE_ITEM_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CART_REMOVE_ITEM_FAIL,
-            payload: error.response ? error.response.data : error.message,
-        });
-    }
+  export const removeFromCart = (productId) => (dispatch, getState) => {
+    // Dispatch the request action if needed
+    dispatch({ type: CART_REMOVE_ITEM_REQUEST });
+
+    // Get the current state of the cart
+    const { cartItems } = getState().cartReducer;
+
+    // Filter out the item to be removed
+    const updatedCartItems = cartItems.filter(item => item.id !== productId);
+
+    // Dispatch the success action with the updated cart
+    dispatch({
+        type: CART_REMOVE_ITEM_SUCCESS,
+        payload: updatedCartItems,
+    });
 };
+
 
 
 export const clearCart = () => async(dispatch) => {

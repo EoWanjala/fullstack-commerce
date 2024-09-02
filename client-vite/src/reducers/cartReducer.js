@@ -59,8 +59,9 @@ export const cartReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                cartItems: state.cartItems.filter(x => x.id !== action.payload),
+                cartItems: action.payload, // Update the cart items with the response
             };
+        ;
 
         case CART_CLEAR_SUCCESS:
             return {
@@ -76,15 +77,15 @@ export const cartReducer = (state = initialState, action) => {
                 cartItems: action.payload || [],
             };
 
-        case CART_ADD_ITEM_FAIL:
-        case CART_REMOVE_ITEM_FAIL:
-        case CART_CLEAR_FAIL:
-        case CART_FETCH_FAIL:
+            case CART_ADD_ITEM_FAIL:
+            case CART_REMOVE_ITEM_FAIL:
+            case CART_FETCH_FAIL:
             return {
-                ...state,
-                loading: false,
-                error: action.payload,
+            ...state,
+            loading: false,
+            error: action.payload.message || action.payload, // Ensure it's a string
             };
+
 
         default:
             return state;

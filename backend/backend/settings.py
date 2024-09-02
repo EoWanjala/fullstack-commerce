@@ -12,10 +12,17 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from django.utils.timezone import timedelta
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE = BASE_DIR / '.env'
 
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env(ENV_FILE)
+PAYSTACK_SECRET_KEY= env("PAYSTACK_SECRET_KEY")
+PAYSTACK_PUBLIC_KEY= env("PAYSTACK_PUBLIC_KEY")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -54,23 +61,25 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Must be early
     'django.middleware.common.CommonMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'backend.urls'
 
 # Session settings
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # To use database-backed sessions
-SESSION_COOKIE_AGE = 1209600  # Two weeks, adjust as needed
-SESSION_SAVE_EVERY_REQUEST = True  # Save session data on every request
+SESSION_ENGINE = 'django.contrib.sessions.backends.db' # Ensure sessions are stored in the database
+SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+SESSION_SAVE_EVERY_REQUEST = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'  # Use JSONSerializer instead of PickleSerializer
+
 
 
 
@@ -192,8 +201,16 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'exp://192.168.0.100:8081'
 ]
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+CORS_ALLOW_CREDENTIALS = True 
+CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 
-CORS_ALLOW_CREDENTIALS = True
+# For production set 
+# SESSION_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_HTTPONLY = False
 
 CORS_ALLOW_METHODS = [
     'GET',

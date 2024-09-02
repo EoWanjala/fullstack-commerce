@@ -11,11 +11,9 @@ const Myaccount = () => {
     const navigate = useNavigate()
     const userLoginReducer = useSelector((state)=> state.userLoginReducer)
     const {userInfo, loading, error} = userLoginReducer
-    console.log("userinfo: ", userInfo)
 
     const getAllOrdersReducer = useSelector((state)=> state.getAllOrdersReducer)
     const {orders, loading:loadingOrders, error:errorOrders} = getAllOrdersReducer
-    console.log("orders: ", orders)
 
     useEffect(()=>{
         dispatch(getOrders())
@@ -26,7 +24,7 @@ const Myaccount = () => {
         navigate('/')
     }
   return (
-    <div className='pt-20 pb-20 max-w-7xl mx-auto min-h-screen'>
+    <div className='pt-20 pb-20 container mx-auto min-h-screen'>
         <div className='flex mx-3 flex-col'>
             <h1 className='text-4xl font-bold italic text-gray-600'>My Account</h1>
             <button onClick={handlelogout} className='bg-grade w-1/4 mt-2 text-white py-2 font-medium rounded-lg text-lg hover:bg-red-500'>Logout</button>
@@ -54,7 +52,7 @@ const Myaccount = () => {
         </div>
         <div className='mt-10 mx-3'>
             <h1 className='text-4xl font-bold italic text-gray-600 flex items-center justify-center'> My Orders</h1>
-            <div className='flex flex-col items-center justify-center'>
+            <div className='flex flex-col mt-5'>
                 {loadingOrders ? (
                     <Spinner />
                 ) : 
@@ -71,27 +69,30 @@ const Myaccount = () => {
                                     <p><strong>Status:</strong> {order.status}</p>
                                 </div>
                                 <div className='p-4'>
-                                    <table className='min-w-full divide-y divide-gray-200'>
+                                    <table className='min-w-full divide-y divide-gray-400'>
                                         <thead>
-                                            <th className='px-4 py-2'>Title</th>
-                                            <th className='px-4 py-2'>Quantity</th>
-                                            <th className='px-4 py-2'>Price</th>
+                                            <tr>
+                                                <th className='px-4 py-2 '>Title</th>
+                                                <th className='px-4 py-2'>Quantity</th>
+                                                <th className='px-4 py-2'>Price</th>
+                                            </tr>
+                                            
                                         </thead>
 
                                         <tbody className='bg-white divide-y divide-gray-200'>
                                             {order.items.map((item) => (
                                                 <tr key={item.id} className='hover:bg-gray-100'>
-                                                    <td className='px-4 py-2'>{item.title}</td>
-                                                    <td className='px-4 py-2'>{item.quantity}</td>
-                                                    <td className='px-4 py-2'>$ {item.price}</td>
+                                                    <td className='px-4 py-2 font-medium'>{item.product.title || 'No Title Available'}</td>
+                                                    <td className='px-4 py-2 font-medium'>{item.quantity}</td>
+                                                    <td className='px-4 py-2 font-medium'>KES {item.price}</td>
                                                 </tr>
                                                 ))}
                                         </tbody>
                                         <tfoot className='bg-gray-100'>
                                             <tr>
-                                                <td className='px-4 py-2'>Subtotal:</td>
-                                                <td className='px-4 py-2'>{order.get_total_quantit}</td>
-                                                <td className='px-4 py-2'>{order.paid_amount}</td>
+                                                <td className='px-4 py-2 text-lg font-medium'>Subtotal:</td>
+                                                <td className='px-4 py-2 font-medium'>{order.total_quantity}</td>
+                                                <td className='px-4 py-2 font-medium'>{order.paid_amount  || "Not paid"}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -100,7 +101,7 @@ const Myaccount = () => {
                         ))}
                     </div>
                 ) : (
-                    <p className='text-2xl font-bold text-gray-500 mt-5'>You don't have any orders yet...</p>
+                    <p className='text-2xl font-bold text-gray-500 mt-5 flex items-center justify-center'>You don't have any orders yet...</p>
                 )}
             </div>
         </div>

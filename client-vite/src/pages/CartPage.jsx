@@ -1,44 +1,75 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart, addToCart, removeFromCart } from '../actions/cartActions';
-import { Link } from 'react-router-dom';
-import { Spinner } from "../components"
+import { addToCart, removeFromCart } from '../actions/cartActions';
+import { initiatePayment } from '../actions/paymentAction';
+import { Link, useNavigate } from 'react-router-dom';
+import { Spinner } from "../components";
 
 const API_URL = import.meta.env.VITE_BACKEND_API;
 
 const CartPage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const cartReducer = useSelector((state) => state.cartReducer);
     const { cartItems, loading, error } = cartReducer;
 
-    // Fetch cart items on component mount
-    useEffect(() => {
-        if (!loading && cartItems.length === 0) {
-            dispatch(fetchCart());
-        }
-    }, [dispatch, cartItems, loading]);
+    const paymentReducer = useSelector((state) => state.initiatePaymentReducer);
+    const { paymentData, loading: paymentLoading, error: paymentError } = paymentReducer;
 
-    // Handle increasing quantity
+    const userLoginReducer = useSelector(state => state.userLoginReducer);
+    const { userInfo } = userLoginReducer;
+
     const increaseQuantity = (item) => {
         dispatch(addToCart(item.id, item.quantity + 1, true));
     };
 
-    // Handle decreasing quantity
     const decreaseQuantity = (item) => {
         if (item.quantity > 1) {
             dispatch(addToCart(item.id, item.quantity - 1, true));
         }
     };
 
-    // Handle removing item from cart
     const handleRemoveItem = (productId) => {
         dispatch(removeFromCart(productId));
     };
 
-    // Calculate total price for the cart
     const calculateTotalPrice = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     };
+
+    const calculateTotalQuantity = () => {
+        return cartItems.reduce((total, item) => total + item.quantity, 0);
+    };
+
+    const handleCheckout = () => {
+        const orderData = {
+            items: cartItems.map(item => ({
+                id: item.id,
+                title: item.title,
+                price: item.price,
+                quantity: item.quantity,
+                total_price: item.total_price,
+                thumbnail: item.thumbnail,
+                url: item.url,
+                num_available: item.num_available,
+            })),
+            total_cost: calculateTotalPrice(),
+            total_quantity: calculateTotalQuantity(),
+            first_name: userInfo.first_name,
+            last_name: userInfo.last_name,
+            email: userInfo.email,
+            address: userInfo.address || 'N/A',
+            zipcode: userInfo.zipcode || '0000',
+            place: userInfo.place || 'Unknown',
+            phone: userInfo.phone || '0000000000',
+        };
+    
+        console.log("Order Data: ", orderData);
+        dispatch(initiatePayment({ order: orderData }));
+    };
+    
+    
 
     function numberWithCommas(x) {
         if (x === undefined || x === null) return "0"; 
@@ -51,11 +82,11 @@ const CartPage = () => {
             {loading ? (
                 <Spinner />
             ) : error ? (
-                <p>Error: {error}</p>
+                <p>Error: {typeof error === 'string' ? error : error.message || 'An error occurred'}</p>
             ) : cartItems.length === 0 ? (
                 <div className="text-center">
-                    <p className='text-4xl font-bold'>Cart is empty</p>
-                    <Link to="/" className="text-lg text-primary underline">
+                    <p className='text-4xl font-bold mb-3'>Cart is empty</p>
+                    <Link to="/" className="text-lg text-white px-1.5 py-1.5 rounded-lg bg-blue-500">
                         Continue Shopping
                     </Link>
                 </div>
@@ -108,7 +139,7 @@ const CartPage = () => {
                             <div className='flex items-center justify-between p-4 rounded-lg w-full'>
                                 <input type='text' placeholder='Coupon code'
                                 className='py-4 px-2 border rounded-l-lg flex-grow border-gray-400 shadow-md'/>
-                                <button className='px-5 py-1.5 md:py-4 bg-primary text-white rounded-r-md hover:bg-primary/55'>Apply Coupon Code</button>
+                                <button className='px-5 py-4 md:py-4 bg-primary text-white rounded-r-md hover:bg-primary/55'>Apply Coupon Code</button>
                             </div>
                         </div>
                         <div className='mt-3'>
@@ -119,10 +150,14 @@ const CartPage = () => {
                                     <p className='text-dark mr-12 text-lg font-normal'>Subtotal</p>
                                     <strong className='text-lg'>KES {numberWithCommas(calculateTotalPrice())}</strong>
                                 </div>
-                                <div className='mt-5'>
-                                    <Link to="/checkout" className='px-10 py-3 bg-primary text-white w-full rounded-full uppercase text-lg tracking-wide hover:bg-primary/65'>
-                                        Proceed to Checkout
-                                    </Link>
+                                <div className='mt-5 mx-3'>
+                                <button 
+                                    onClick={handleCheckout} 
+                                    className={`px-10 py-3 ${cartItems.length === 0 ? 'bg-gray-300' : 'bg-primary hover:bg-primary/80'} text-white w-full rounded-full uppercase text-lg tracking-wide`}
+                                    disabled={cartItems.length === 0}  
+                                >
+                                    Proceed to Checkout
+                                </button>
                                 </div>
                             </div>
                         </div>

@@ -28,9 +28,12 @@ class CartView(APIView):
             }
 
             cart_data.append(product_data)
+        
 
         total_quantity = cart.get_total_length()
         total_cost = cart.get_total_cost()
+        
+        request.session.modified = True
 
         user_data = {
             'first_name': request.user.first_name,
@@ -49,14 +52,13 @@ class CartView(APIView):
             **user_data,
         }
 
-        print("Response data: ", response_data)
+        print("Cart Response data: ", response_data)
         return JsonResponse(response_data, status=status.HTTP_200_OK)
-
-
-
-
     
     def post(self, request):
+        print(f"Session Key: {request.session.session_key}")
+        print(f"Session Data: {request.session.get('cart')}")
+
         cart = Cart(request)
         product_id = request.data.get('product_id')
         quantity = int(request.data.get("quantity", 1))
@@ -71,6 +73,8 @@ class CartView(APIView):
             cart.add(product=product, quantity=1, update_quantity=False)
         else:
             cart.add(product=product, quantity=quantity, update_quantity=True)
+
+        request.session.modified = True
 
         # Debugging the cart contents after adding
         cart_data = []
@@ -96,10 +100,14 @@ class CartView(APIView):
         }
 
         print("Response data after adding item: ", response_data)
+        print("Cart Data: ", cart_data)  # Log the cart data before sending response
+        print("Total Quantity: ", total_quantity)
+        print("Total Cost: ", total_cost)
         return Response(response_data, status=status.HTTP_200_OK)
 
     
     def delete(self, request):
+        print("Request Data: ", request.data)
         cart = Cart(request)
         product_id = request.data.get('product_id')
 
