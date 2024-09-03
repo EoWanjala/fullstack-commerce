@@ -34,7 +34,7 @@ const FeaturedProducts = ({ product }) => {
                 KES {numberWithCommas(product.price)}
               </Text>
               <TouchableOpacity className='block text-center font-pbold py-2 text-white'>
-                <Text className='block text-center font-pbold py-1.5 px-3 text-white bg-red-700 rounded-lg hover:bg-red-400 ml-10 '>Buy</Text>
+               
               </TouchableOpacity>
             </View>
           </View>

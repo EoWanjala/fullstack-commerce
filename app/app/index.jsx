@@ -1,52 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react';
-import { getProductIndexList } from '../actions/productsActions';
-import FeaturedProducts from '../components/FeaturedProducts';
-import Spinner from '../components/Spinner';
+import { Text, View } from 'react-native';
+import { Redirect, router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context'; 
+import CustomButton from "../components/CustomButton";
+import { ScrollView, Image } from 'react-native';
+import Logo from '../components/Logo';
+import { images } from '../constants';
 
-export default function App() {
-  const dispatch = useDispatch();
-  const producstIndexReducer = useSelector((state) => state.producstIndexReducer);
-
-  const { loading: featuredProductsLoading, error: featuredProductsError, featuredProducts } = producstIndexReducer;
-
-  useEffect(() => {
-    dispatch(getProductIndexList());
-  }, [dispatch]);
-
-  const renderProduct = ({ item }) => <FeaturedProducts product={item} />;
-
+const index = () => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '' }} className='bg-white'> 
-      <View style={{ flex: 1 }}>
-        {featuredProductsLoading ? (
-          <Spinner />
-        ) : featuredProductsError ? (
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <Text style={{ backgroundColor: 'red', padding: 8, borderRadius: 8, color: 'white', fontWeight: 'bold' }}>
-              {featuredProductsError}
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View className="flex-1 items-center justify-center px-4">
+          <Logo />
+          <View className="relative mt-5">
+            <Text className="text-4xl text-primary font-pbold text-center">
+              Discover Endless Possibilities with{ ' ' }
+              <Text className="text-red-600">MJ's</Text>
             </Text>
+            <Image
+              source={images.path} 
+              className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
+              resizeMode="contain"
+            />
           </View>
-        ) : (
-          <FlatList
-            data={featuredProducts}
-            renderItem={renderProduct}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
-            contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
-            ListHeaderComponent={() => (
-              <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10, textAlign: 'center' }}>
-                Featured Products
-              </Text>
-            )}
-            scrollEnabled={true}
-            showsVerticalScrollIndicator={false}
+          <Text className="text-lg font-pregular mt-7 text-gray-600 text-center">
+            Where creativity meets innovation: embark on a journey of limitless exploration with MJ's
+          </Text>
+        </View>
+      </ScrollView>
+      <CustomButton
+            title='Get Started'
+            handlePress={() => router.push('/home')}
+            containerStyles="w-full mt-7 mb-4 "
           />
-        )}
-      </View>
     </SafeAreaView>
   );
 }
+
+export default index;

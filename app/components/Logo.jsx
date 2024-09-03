@@ -5,7 +5,7 @@ import { icons } from '../constants'
 
 const Logo = () => {
   return (
-    <View className = 'pt-20 ml-4 flex flex-row'>
+    <View className = 'pt-20 ml-4'>
       <Image
       source={icons.logo}
       className='w-10 h-10 rounded-full'/>

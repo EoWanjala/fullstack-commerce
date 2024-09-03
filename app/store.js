@@ -22,6 +22,7 @@ const initializeStore = async () => {
     const store = configureStore({
         reducer: allReducers, 
         preloadedState: initialState,
+        
     });
 
     return store;
