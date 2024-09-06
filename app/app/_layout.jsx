@@ -5,12 +5,15 @@ import { useEffect, useState } from 'react';
 import initializeStore from '../store';
 import { Provider } from 'react-redux';
 import { Drawer } from "expo-router/drawer"
-
-
+import { listCategories } from '../actions/productsActions';
+import { useDispatch, useSelector } from 'react-redux';
+import Spinner from '../components/Spinner';
+import TabsLayout from './(tabs)/_layout';
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+
     const [store, setStore] = useState(null);
     const [fontsLoaded, error] = useFonts({
         "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -46,12 +49,26 @@ const RootLayout = () => {
 
     return (
         <Provider store={store}>
-            <Drawer>
-                <Drawer.Screen name='(drawer)' options={{ title: 'Mjs' }} />
-                <Drawer.Screen name='index' options={{ headerShown: false }} />
-            </Drawer>
+            <ReduxApp />
         </Provider>
     );
 }    
+
+const ReduxApp = () => {
+    const dispatch = useDispatch()
+    const categoryListReducer = useSelector((state) => state.categoryListReducer);
+    const { categories, loading, error } = categoryListReducer;
+
+    useEffect(() => {
+        dispatch(listCategories());
+      }, [dispatch]);
+
+      return (
+        <Stack>
+            <Stack.Screen name='index' options={{ headerShown: false }} />
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+        </Stack>
+      )
+}
 
 export default RootLayout;

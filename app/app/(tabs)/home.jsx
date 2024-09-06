@@ -3,9 +3,9 @@ import { Text, View, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
-import {getProductIndexList} from "../../../actions/productsActions"
-import FeaturedProducts from "../../../components/FeaturedProducts"
-import Spinner from '../../../components/Spinner';
+import { getProductIndexList } from '../../actions/productsActions';
+import FeaturedProducts from '../../components/FeaturedProducts';
+import Spinner from '../../components/Spinner';
 
 
 export default function home() {

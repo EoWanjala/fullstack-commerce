@@ -13,6 +13,7 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import logo from "../assets/icons/1-02.png"
 import logo1 from "../assets/icons/logo-mj.png"
+import cart from "../assets/icons/shopping-cart.png"
 
 
 export default {
@@ -30,5 +31,6 @@ export default {
   eyeHide,
   eye,
   logo,
-  logo1
+  logo1,
+  cart
 };

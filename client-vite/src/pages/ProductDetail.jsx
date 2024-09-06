@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 import { getProductDetail } from '../actions/productsActions'
 import { FeaturedProducts, Spinner } from '../components'
 import { addToCart } from '../actions/cartActions'
-import { fetchCart } from '../actions/cartActions'
 
 const ProductDetail = () => {
     const { category_slug, slug } = useParams()

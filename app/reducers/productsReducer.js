@@ -41,7 +41,6 @@ export const producstIndexReducer = (state = {
             return { ...state, loading: true };
         
         case PRODUCTS_INDEX_SUCCESS:
-            console.log("Payload:", action.payload);
             return {
                 ...state,
                 loading: false,
@@ -141,12 +140,13 @@ export const productDetailReducer = (state = { product: {}, relatedProducts: [] 
     switch (action.type) {
         case PRODUCT_DETAIL_REQUEST:
             return { ...state, loading: true, product: {}, relatedProducts: [] };
+            
 
         case PRODUCT_DETAIL_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                product: action.payload.product,
+                product: action.payload,
                 relatedProducts: action.payload.related_products,
             };
 
@@ -157,6 +157,7 @@ export const productDetailReducer = (state = { product: {}, relatedProducts: [] 
             return state;
     }
 };
+
 
 
 export const productReviewReducer = (state = {}, action) => {

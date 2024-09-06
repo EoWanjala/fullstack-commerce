@@ -13,8 +13,6 @@ const CategoryDetail = () => {
     const { category } = categoryDetailReducer
     const { loading, error, products } = categoryDetailReducer
 
-    console.log("Category Products: ", category)
-    console.log("Products: ", products)
 
     useEffect(()=> {
         dispatch(getCategoryDetail(slug))

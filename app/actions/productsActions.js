@@ -106,7 +106,7 @@ export const getProductDetail = (category_slug, slug) => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_DETAIL_REQUEST });
 
-        const { data } = await axios.get(`${apiUrl }/store/product/${category_slug}/${slug}/`);
+        const { data } = await axios.get(`${apiUrl }/store/${category_slug}/${slug}/`);
 
         dispatch({ type: PRODUCT_DETAIL_SUCCESS, payload: data });
 
