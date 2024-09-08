@@ -201,11 +201,13 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5174',
     'http://localhost:5173',
     'http://localhost:8081',
-    'exp://192.168.0.100:8081'
+    'exp://192.168.0.100:8081',
+    'exp://192.168.0.103:8082'
 ]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:5174']
 CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8081']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8082']
 CORS_ALLOW_CREDENTIALS = True 
 CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'

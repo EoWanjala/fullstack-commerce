@@ -16,9 +16,9 @@ import {
     CART_FETCH_REQUEST,
     CART_FETCH_SUCCESS,
     CART_FETCH_FAIL,
-} from "../constants/index"
+} from "../constant/index"
 
-const API_URL = import.meta.env.VITE_BACKEND_API;
+const API_URL = process.env.EXPO_PUBLIC_API_URL
 
 // cartActions.js
 export const addToCart = (productId, quantity = 1, updateQuantity = false) => async (dispatch) => {
@@ -27,25 +27,23 @@ export const addToCart = (productId, quantity = 1, updateQuantity = false) => as
             type: CART_ADD_ITEM_REQUEST,
             payload: { productId, quantity, updateQuantity }
         });
-  
-        // Sending request to the backend
         const response = await axios.post(`${API_URL}/api/cart/`, {
             product_id: productId,
             quantity,
             update_quantity: updateQuantity
         });
-  
-        console.log("Response data addtoCart: ", response.data);  // Check the structure of the response
-        console.log("Response data addtoCart response: ", response);  // Check the structure of the response
+
+        ;  // Check the structure of the response
   
         if (response.data.cart) {
             dispatch({
                 type: CART_ADD_ITEM_SUCCESS,
-                payload: response.data.cart, // Dispatch the updated cart data
+                payload: response.data.cart, 
             });
         } else {
             throw new Error('Unexpected response format');
         }
+        console.log("New Cart Payload: ", response.data.cart);
     } catch (error) {
         console.error("Error adding to cart: ", error.response ? error.response.data : error.message);
         dispatch({
@@ -56,18 +54,26 @@ export const addToCart = (productId, quantity = 1, updateQuantity = false) => as
   };
 
   
-  export const removeFromCart = (productId) => (dispatch, getState) => {
+  export const removeFromCart = (productId) => async (dispatch, getState) => {
     dispatch({ type: CART_REMOVE_ITEM_REQUEST });
-    const { cartItems } = getState().cartReducer;
 
-    // Filter out the item to be removed
-    const updatedCartItems = cartItems.filter(item => item.id !== productId);
+    try {
+        const response = await axios.delete(`${API_URL}/api/cart/`, {
+            data: { product_id: productId }
+        });
+        
+        const updatedCartItems = response.data.cartItems || getState().cartReducer.cartItems.filter(item => item.id !== productId);
 
-    // Dispatch the success action with the updated cart
-    dispatch({
-        type: CART_REMOVE_ITEM_SUCCESS,
-        payload: updatedCartItems,
-    });
+        dispatch({
+            type: CART_REMOVE_ITEM_SUCCESS,
+            payload: updatedCartItems,
+        });
+    } catch (error) {
+        dispatch({
+            type: CART_REMOVE_ITEM_FAIL,
+            payload: error.response ? error.response.data : { message: error.message },
+        });
+    }
 };
 
 

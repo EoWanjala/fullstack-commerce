@@ -5,6 +5,7 @@ import { getProductDetail } from '../../../../actions/productsActions';
 import { useLocalSearchParams } from 'expo-router';
 import Spinner from '../../../../components/Spinner';
 import FeaturedProducts from '../../../../components/FeaturedProducts';
+import { addToCart } from '../../../../actions/cartActions';
 
 const ProductDetailScreen = () => {
     const { category_slug, slug } = useLocalSearchParams();
@@ -21,6 +22,10 @@ const ProductDetailScreen = () => {
   
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     const fullImageUrl = apiUrl + product.image;
+
+    const handleAddToCart = (productId) => {
+      dispatch(addToCart(productId, 1, false))
+    }
   
     function numberWithCommas(x) {
       if (x === undefined || x === null) return 'N/A';
@@ -36,7 +41,8 @@ const ProductDetailScreen = () => {
           <Text style={{ fontSize: 24, fontWeight: 'bold', marginVertical: 8 }}>{product.title}</Text>
           <Text style={{ fontSize: 20, color: 'black', marginBottom: 8 }} className='font-pbold'>KES {numberWithCommas(product.price)}</Text>
           <Text style={{ fontSize: 16, color: 'black' }} className='text-lg'>{product.description}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={() => handleAddToCart(product.id)}>
             <Text className='bg-red-600 text-center text-white w-1/2 text-lg py-2 rounded-lg hover:bg-red-400 mt-2 font-pbold'>Add to Cart</Text>
           </TouchableOpacity>
           {product.variants && product.variants.length > 0 && (
@@ -49,7 +55,8 @@ const ProductDetailScreen = () => {
                   <Text className='font-pmedium text-xl ml-2 mt-2'>{variant.title}</Text>
                   <Text style={{ fontSize: 20, color: 'black', marginBottom: 8 }} className='font-pbold ml-2'>KES {numberWithCommas(variant.price)}</Text>
                   <Text style={{ fontSize: 20, color: 'black', marginBottom: 8 }} className='font-pbold ml-2'>Available: {variant.num_available}</Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                  onPress={()=> handleAddToCart(variant.id)}>
                       <Text className='bg-red-600 text-center text-white w-1/2 text-lg py-2 rounded-lg hover:bg-red-400 mt-2 font-pbold ml-2 mb-2'>Add to Cart</Text>
                   </TouchableOpacity>
                 </View>
