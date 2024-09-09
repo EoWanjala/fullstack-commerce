@@ -31,7 +31,7 @@ const index = () => {
       </ScrollView>
       <CustomButton
             title='Get Started'
-            handlePress={() => router.push('/home')}
+            onPress={() => router.push('/home')}
             containerStyles="w-full mt-7 mb-4 "
           />
     </SafeAreaView>

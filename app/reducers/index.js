@@ -16,8 +16,17 @@ import {
 } from "./userReducer"
 
 import {
+    getAllOrdersReducer
+} from "./orderReducer"
+
+import {
     cartReducer
 } from "./cartReducer"
+
+import {
+    initiatePaymentReducer,
+    verifyPaymentReducer
+} from "./paymentReducer"
 
 const allReducers = combineReducers({
     allproductsReducer,
@@ -29,7 +38,10 @@ const allReducers = combineReducers({
     productReviewReducer,
     userLoginReducer,
     userRegisterReducer,
-    cartReducer
+    cartReducer,
+    getAllOrdersReducer,
+    initiatePaymentReducer,
+    verifyPaymentReducer
 })
 
 export default allReducers

@@ -30,7 +30,7 @@ const PaymentVerification = () => {
         ) : error ? (
             {error}
         ) : verificationData ? (
-            <div className="text-center">w1`    q <Q1Q>`    </Q1Q>`
+            <div className="text-center">
           <h2 className='text-4xl font-bold'>Payment Verification</h2>
           <h4 className='text-lg font-medium'>
             Order #{verificationData.placed_order.id} - {verificationData.payment.payment_status}

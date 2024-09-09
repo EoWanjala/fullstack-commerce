@@ -2,7 +2,8 @@ import { View, Text, Image } from 'react-native'
 import { Tabs, Redirect, Stack } from 'expo-router'
 import {icons} from '../../constants'
 import { useSelector } from 'react-redux'
-import ProductDetailScreen from './product/[category_slug]/[slug]'
+
+
 
 const TabIcon = ({ icon, color, name, focused, cartItemsCount }) => {
     return (
@@ -28,9 +29,14 @@ const TabIcon = ({ icon, color, name, focused, cartItemsCount }) => {
   const TabsLayout = () => {
     const cartReducer = useSelector((state) => state.cartReducer);
     const { cartItems } = cartReducer;
-    console.log("Cart Items Reducer State: ", cartItems)
+   
     const cartItemsCount = Array.isArray(cartItems) ? cartItems.length : 0;
+
+    const userLoginReducer = useSelector((state) => state.userLoginReducer)
+    const { loading, error, userInfo } = userLoginReducer
+    console.log("User Info", userInfo)
   
+    const loginTabTitle = userInfo && userInfo.username ? userInfo.username : "Sign In";
     return (
       <>
         <Tabs
@@ -89,7 +95,7 @@ const TabIcon = ({ icon, color, name, focused, cartItemsCount }) => {
               <TabIcon
                 icon={icons.profile}
                 color={color}
-                name='Sign In'
+                name={loginTabTitle}
                 focused={focused}
               />
             )
@@ -103,6 +109,20 @@ const TabIcon = ({ icon, color, name, focused, cartItemsCount }) => {
           />
           <Tabs.Screen
             name="signup"
+            options={{
+              tabBarButton: (props) => null,
+              headerShown: false,
+            }}
+          />
+          <Tabs.Screen
+            name="checkout"
+            options={{
+              tabBarButton: (props) => null,
+              headerShown: false,
+            }}
+          />
+          <Tabs.Screen
+            name="verify-payment/[ref]"
             options={{
               tabBarButton: (props) => null,
               headerShown: false,

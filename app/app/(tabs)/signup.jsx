@@ -49,7 +49,7 @@ const signup = () => {
         <Image 
           source={images.apple}
           resizeMode='contain'
-          className='w-[200px] h-[200px]' />
+          className='w-[150px] h-[150px]' />
         <Text className='text-2xl font-psemibold mt-10'>Log in to Mj's</Text>
         <FormField 
           title='Username'
