@@ -6,6 +6,9 @@ import Login from "./Login";
 import Register from "./Register";
 import Checkout from "./Checkout";
 import PaymentVerification from "./PaymentVerification";
+import AllProduct from "./AllProduct";
+import SearchResult from "./SearchResult";
+import Contact from "./Contact";
 
 export {
     Home,
@@ -15,5 +18,8 @@ export {
     Login,
     Register,
     Checkout,
-    PaymentVerification
+    PaymentVerification,
+    AllProduct,
+    SearchResult,
+    Contact
 }

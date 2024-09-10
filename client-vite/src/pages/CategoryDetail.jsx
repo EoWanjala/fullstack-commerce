@@ -19,7 +19,7 @@ const CategoryDetail = () => {
     }, [dispatch, slug])
     
   return (
-    <div className='max-w-7xl mx-auto pt-10'>
+    <div className='max-w-7xl mx-auto pt-10 pb-20 mb-64'>
         <h1 className='text-gray-700 text-4xl font-bold flex items-center justify-center'>{category.title}</h1>
         <div className='mx-3'>
             {loading && <Spinner/>}

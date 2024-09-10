@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { getProductIndexList } from '../../actions/productsActions';
 import FeaturedProducts from '../../components/FeaturedProducts';
 import Spinner from '../../components/Spinner';
+import Search from "../../components/Search"
 
 
 export default function home() {
@@ -26,7 +27,9 @@ export default function home() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '' }} className='bg-white'>
-      <View></View> 
+      <View className='pt-20'>
+        <Search />  
+      </View> 
       <View style={{ flex: 1 }}>
         {featuredProductsLoading ? (
           <Spinner />

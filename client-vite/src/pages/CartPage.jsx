@@ -55,6 +55,11 @@ const CartPage = () => {
 
     const handleCheckout = (e) => {
         e.preventDefault();
+        if (!userInfo) {
+            alert("You need to be logged in to proceed to checkout.");
+            return;
+        }
+
         const orderData = {
             items: cartItems.map(item => ({
                 id: item.id,
@@ -76,12 +81,12 @@ const CartPage = () => {
             place: userInfo.place || place,
             phone: userInfo.phone || phone,
         };
-    
+
         console.log("Order Data: ", orderData);
         dispatch(initiatePayment({ order: orderData }));
         navigate('/checkout');
     };
-    
+
     
 
     function numberWithCommas(x) {
@@ -169,7 +174,7 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>First Name</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='first name'
-                                            placeholder={userInfo.first_name}
+                                            placeholder={userInfo?.first_name}
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}/>
                                         </div>
@@ -177,7 +182,7 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>Last Name</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='first name'
-                                            placeholder={userInfo.last_name}
+                                            placeholder={userInfo?.last_name}
                                             value={lastName}
                                             onChange={(e) => setLastName(e.target.value)}/>
                                         </div>
@@ -185,7 +190,7 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>Email</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='email'
-                                            placeholder={userInfo.email}
+                                            placeholder={userInfo?.email}
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}/>
                                         </div>
@@ -193,7 +198,7 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>Address</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='first name'
-                                            placeholder={userInfo.address|| 'N/A'}
+                                            placeholder={userInfo?.address|| 'N/A'}
                                             value={address}
                                             onChange={(e) => setAddress(e.target.value)}/>
                                         </div>
@@ -201,7 +206,7 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>Zipcode</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='first name'
-                                            placeholder={userInfo.zipcode || 'N/A'}
+                                            placeholder={userInfo?.zipcode || 'N/A'}
                                             value={zipcode}
                                             onChange={(e) => setZipcode(e.target.value)}/>
                                         </div>
@@ -209,7 +214,7 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>Place</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='first name'
-                                            placeholder={userInfo.place || 'N/A'}
+                                            placeholder={userInfo?.place || 'N/A'}
                                             value={place}
                                             onChange={(e) => setPlace(e.target.value)}/>
                                         </div>
@@ -217,17 +222,13 @@ const CartPage = () => {
                                             <label className='block mb-2 text-sm font-medium'>Phone Number</label>
                                             <input className='bg-gray-50 placeholder-gray-300 p-2.5 block border border-gray-300 w-full shadow-md rounded-lg'
                                             type='phonenmber'
-                                            placeholder={userInfo.phone || 'N/A'}
+                                            placeholder={userInfo?.phone || 'N/A'}
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}/>
                                         </div>
                                         
-                                        <button 
-                                        onClick={handleCheckout} 
-                                        className={`px-10 py-3 ${cartItems.length === 0 ? 'bg-gray-300' : 'bg-primary hover:bg-primary/80'} text-white w-full rounded-full uppercase text-lg tracking-wide`}
-                                        disabled={cartItems.length === 0}  
-                                        >
-                                            Proceed to Checkout
+                                        <button type='submit' className='py-4 px-4 rounded-lg bg-primary text-white text-lg shadow-md hover:bg-primary/70 disabled:bg-gray-400' >
+                                            {paymentLoading ? <Spinner/> : 'Proceed to Checkout'}
                                         </button>
                                     </form>
                                    

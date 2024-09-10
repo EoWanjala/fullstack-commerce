@@ -14,15 +14,17 @@ const Ref = () => {
   const paymentVerify = useSelector((state) => state.verifyPaymentReducer)
   const { loading, error, verificationData } = paymentVerify;
   console.log("Payment ver:", paymentVerify)
-  console.log("Verifying payment with ref:", ref);
+  console.log("Verifying payment with ref:", JSON.stringify(ref));
+
 
   useEffect(() => {
-    if (ref && typeof ref === 'string') {
-      dispatch(verifyPayment(ref));
+    if (ref) {
+      dispatch(verifyPayment(ref.reference));
     } else {
       console.error("Invalid ref value:", ref);
     }
   }, [dispatch, ref]);
+  
   
 
   useEffect(() => {

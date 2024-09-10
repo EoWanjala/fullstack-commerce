@@ -3,8 +3,9 @@ import Spinner from "./Spinner";
 import FeaturedProducts from "./FeaturedProducts";
 import Cart from "./Cart";
 import Myaccount from "./Myaccount";
-import orderform from "./orderform";
-
+import Footer from "./Footer";
+import NotFound from "./NotFound";
+import Carousel from "./Carousel";
 
 export{
     Navbar,
@@ -12,5 +13,7 @@ export{
     FeaturedProducts,
     Cart,
     Myaccount,
-    orderform
+    NotFound,
+    Footer,
+    Carousel
 }

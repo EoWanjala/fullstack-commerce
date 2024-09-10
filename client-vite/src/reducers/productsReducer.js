@@ -58,7 +58,7 @@ export const producstIndexReducer = (state = {
 };
 
 // Reducer for all products
-export const allproductsReducer = (state = { products: [] }, action) => {
+export const allproductsReducer = (state = { products: [], page: 1, pages: 1 }, action) => {
     switch (action.type) {
         case ALL_PRODUCTS_REQUEST:
             return { ...state, loading: true, products: [] };
@@ -67,7 +67,9 @@ export const allproductsReducer = (state = { products: [] }, action) => {
             return {
                 ...state,
                 loading: false,
-                products: action.payload,
+                products: action.payload.results,
+                page: action.payload.page,
+                pages: action.payload.total_pages,
             };
 
         case ALL_PRODUCTS_FAIL:

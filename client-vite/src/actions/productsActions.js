@@ -32,11 +32,11 @@ import axios from "axios"
 
 const API_URL = import.meta.env.VITE_BACKEND_API;
 
-export const allproducts = () => async (dispatch) => {
+export const allproducts = (page = 1) => async (dispatch) => {
     try {
         dispatch({ type: ALL_PRODUCTS_REQUEST });
 
-        const { data } = await axios.get(`${API_URL}/home/allproducts/`);
+        const { data } = await axios.get(`${API_URL}/home/allproducts/?page=${page}`);
 
         dispatch({ type: ALL_PRODUCTS_SUCCESS, payload: data });
 

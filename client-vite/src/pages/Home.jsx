@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductIndexList } from '../actions/productsActions'
-import { Spinner } from '../components'
+import { Spinner, Carousel } from '../components'
 import FeaturedProducts from '../components/FeaturedProducts'
 
 const Home = () => {
@@ -20,14 +20,15 @@ const Home = () => {
 
   return (
     <>
-      <div className='max-w-5xl mx-auto pt-20 pb-10'>
+      <div className='container mx-auto pt-20 pb-10'>
+        <Carousel  className=''/>
         <h1 className='text-3xl font-bold flex flex-wrap justify-center tracking-wide'>Featured Products</h1>
         {featuredProductsLoading ? <Spinner/> : featuredProductsError ? (
           <div className='bg-grade py-2 px-1.5 text-xl font-bold rounded-lg font-white'>{featuredProductsError}</div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 h-1/2'>
             {featuredProducts && featuredProducts.map((product) => (
-              <div key={product.id} className='flex flex-col'>
+              <div key={product.id} className='flex'>
                 <FeaturedProducts product={product}/>
               </div>
             ))}
@@ -43,7 +44,7 @@ const Home = () => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2'>
             {popularProducts && popularProducts.map((product) => (
-              <div key={product.id} className='flex flex-col'>
+              <div key={product.id} className='flex'>
                 <FeaturedProducts product={product}/>
               </div>
             ))}
@@ -59,7 +60,7 @@ const Home = () => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2'>
             {recentlyViewedProducts && recentlyViewedProducts.map((product) => (
-              <div key={product.id} className=''>
+              <div key={product.id} className='flex'>
                 <FeaturedProducts product={product}/>
               </div>
             ))}

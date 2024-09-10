@@ -35,7 +35,7 @@ class ProductSearchView(generics.ListAPIView):
         if instock:
             products = products.filter(num_available__gte=1)
 
-        return products.order_by(sorting, status=status.HTTP_200_OK)
+        return products.order_by(sorting)
 
 
 @api_view(['GET', 'POST'])

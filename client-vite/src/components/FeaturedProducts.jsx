@@ -15,9 +15,9 @@ const FeaturedProducts = ({ product }) => {
     const fullImageUrl = API_URL + product.thumbnail
   return (
     <div className='mx-3 md:mx-0 mt-10 w-full'>
-        <Link to={`/product/${category.slug}/${product.slug}/`} className='flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow overflow-hidden'>
-            <img src={fullImageUrl} className='w-1/2'/>
-            <div className='p-4'>
+        <Link to={`/product/${category.slug}/${product.slug}/`} className='flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow overflow-hidden hover:scale-105 duration-150 h-full'>
+            <img src={fullImageUrl} className='w-1/2 object-cover' alt={product.title}/>
+            <div className='p-4 flex-1 flex flex-col justify-between'>
                 <div className='text-center'>
                     <h3 className='text-lg font-semibold text-gray-600'>{product.title}</h3>
                     <div className='flex items-center space-x-1 rtl:space-x-reverse mt-1'>
@@ -42,7 +42,7 @@ const FeaturedProducts = ({ product }) => {
                         <p className='text-gray-600 text-lg font-bold uppercase'>
                            KES {numberWithCommas(product.price)}
                         </p>
-                        <Link className='block text-center font-bold py-2 text-white bg-grade rounded-lg hover:bg-red-400  mt-2 w-1/2'>Buy</Link>
+                       
                     </div>
                 </div>
             </div>

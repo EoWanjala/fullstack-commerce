@@ -22,8 +22,23 @@ class IndexView(generics.GenericAPIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
     
+class CustomPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'count': self.page.paginator.count,
+            'total_pages': self.page.paginator.num_pages,
+            'results': data
+        })
+    
 class AllProductsView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    pagination_class= PageNumberPagination
-    page_size = 20
+    pagination_class= CustomPagination

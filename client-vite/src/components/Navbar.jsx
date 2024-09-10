@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { logout } from "../actions/userActions"
 import { useNavigate, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { listCategories } from '../actions/productsActions'
@@ -10,7 +9,7 @@ const Navbar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { slug } = useParams();
+    const { query } = useParams();
     const [search, setSearch] = useState('')
 
     const [IsSearchOpen, setIsSearchOpen] = useState(false)
@@ -84,7 +83,14 @@ const Navbar = () => {
         setTooltipVisible(prevState => ({ ...prevState, [tooltip]: false }));
     };
 
-
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (search.trim()) {
+            navigate(`/search/${search}`); // Redirect to search results page with query
+        } else {
+            navigate('/all-products'); // If empty, navigate to all products
+        }
+    };
 
   return (
     <>
@@ -95,20 +101,22 @@ const Navbar = () => {
             
 
             <div className="md:w-full w-1/2">
-                <form className="max-w-2xl mx-auto">
+                <form className="max-w-2xl mx-auto" onSubmit={handleSearchSubmit}>
                     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                     <div className="relative">
                         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
+                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
                         </div>
                         <input
-                        type="search"
-                        id="default-search"
-                        className="block w-full p- ps-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search Properties......"
-                        required
+                            type="search"
+                            id="default-search"
+                            className="block w-full p- ps-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Search Products..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            required
                         />
                     </div>
                 </form>
@@ -137,7 +145,7 @@ const Navbar = () => {
         </nav>
         <nav className='bg-grade md:block hidden'>
             <div className='flex mt- gap-x-5 items-center justify-center'>
-                <Link>
+                <Link to={'/all-products'}>
                     <p className='text-white text-md font-medium my-3'>All Products</p>
                 </Link>
                 <Link to={'/'}>
@@ -148,7 +156,7 @@ const Navbar = () => {
                             <p className='text-white text-md font-medium my-3'>{category.title}</p>
                         </Link>
                     ))}
-                <Link>
+                <Link to={'/contact'}>
                     <p className='text-white text-md font-medium my-3'>Contact Us</p>
                 </Link>
             </div>
@@ -181,31 +189,34 @@ const Navbar = () => {
         {/* Bottom Nav */}
         <div className='fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 md:hidden'>
             <div className='grid h-full max-w-lg grid-cols-5 mx-auto'>
+                <Link to={'/'}>
+                    <button 
+                        onMouseEnter={() => handleMouseEnter('home')} 
+                        onMouseLeave={() => handleMouseLeave('home')} 
+                        type="button" 
+                        className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group mt-5"
+                    >
+                        <svg className="w-5 h-5 mb-1 text-gray-500 group-hover:text-grade" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        <span className="sr-only">Home</span>
+                    </button>
+                    {tooltipVisible.home && (
+                        <div id="tooltip-home" role="tooltip" className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm">
+                            Home
+                            <div className="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    )}
+                </Link>
                 
+                <Link to={'/all-products'}>
                 <button 
-                    onMouseEnter={() => handleMouseEnter('home')} 
-                    onMouseLeave={() => handleMouseLeave('home')} 
-                    type="button" 
-                    className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
-                >
-                    <svg className="w-5 h-5 mb-1 text-gray-500 group-hover:text-grade" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
-                    </svg>
-                    <span className="sr-only">Home</span>
-                </button>
-                {tooltipVisible.home && (
-                    <div id="tooltip-home" role="tooltip" className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm">
-                        Home
-                        <div className="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                )}
-               <button 
                     onMouseEnter={() => handleMouseEnter('allProducts')} 
                     onMouseLeave={() => handleMouseLeave('allProducts')} 
                     type="button" 
                     className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group"
                 >
-                    <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-grade" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                    <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-grade mt-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                         <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
                     </svg>
                     <span className="sr-only">All Products</span>
@@ -216,6 +227,8 @@ const Navbar = () => {
                         <div className="tooltip-arrow" data-popper-arrow></div>
                     </div>
                 )}
+                </Link>
+               
                 <div class="flex items-center justify-center">
                     <button data-tooltip-target="tooltip-new" type="button" class="inline-flex items-center justify-center w-10 h-10 font-medium bg-grade rounded-full hover:bg-red-700 group focus:ring-4 focus:ring-red-300 focus:outline-none">
                         <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
@@ -247,21 +260,24 @@ const Navbar = () => {
                     )}
                 </Link>
                 
-                <button 
-                onMouseEnter={() => handleMouseEnter("contact")}
-                onMouseLeave={() => handleMouseLeave("contact")}
-                class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-grade" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
-                </svg>
-                    <span class="sr-only">Contact </span>
-                </button>
-                {tooltipVisible.contact && (
-                    <div id="tooltip-contact" role="tooltip" className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm">
-                        Contact Us
-                        <div className="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                )}
+                <Link to={'/contact'}>
+                    <button 
+                    onMouseEnter={() => handleMouseEnter("contact")}
+                    onMouseLeave={() => handleMouseLeave("contact")}
+                    class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group">
+                        <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-grade mt-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                        <span class="sr-only">Contact </span>
+                    </button>
+                    {tooltipVisible.contact && (
+                        <div id="tooltip-contact" role="tooltip" className="absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm">
+                            Contact Us
+                            <div className="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    )}
+                </Link>
+                
             </div>
         </div>
     </>

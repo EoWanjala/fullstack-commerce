@@ -27,7 +27,7 @@ module.exports = {
         xs: "450px",
       },
       backgroundImage: {
-        "hero-pattern": "url('/src/assets/hero-slider-1.jpg')",
+        "hero-pattern": "url('/src/assets/photo.png')",
         "hero-bg": "url('/src/assets/testimonial-bg.jpg')",
         "hero-footer": "url('/src/assets/footer-bg.jpg')"
       },
