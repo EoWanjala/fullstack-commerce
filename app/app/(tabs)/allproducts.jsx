@@ -13,6 +13,7 @@ const ProductList = () => {
 
   const allproductsReducer = useSelector((state) => state.allproductsReducer)
   const { loading, error, products } = allproductsReducer
+  console.log("AllPrducts: ", products)
 
   useEffect(()=> {
     dispatch(allproducts());
@@ -41,7 +42,7 @@ const ProductList = () => {
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
           ListHeaderComponent={() => (
             <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10, textAlign: 'center' }}>
-              Happy Shopping !!
+              😊 Happy Shopping !!
             </Text>
           )}
           scrollEnabled={true}

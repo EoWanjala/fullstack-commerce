@@ -68,7 +68,7 @@ export const allproductsReducer = (state = { products: [] }, action) => {
             return {
                 ...state,
                 loading: false,
-                products: action.payload,
+                products: action.payload.results,
             };
 
         case ALL_PRODUCTS_FAIL:

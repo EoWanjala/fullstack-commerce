@@ -128,6 +128,13 @@ const TabIcon = ({ icon, color, name, focused, cartItemsCount }) => {
               headerShown: false,
             }}
           />
+          <Tabs.Screen
+            name="search/[search]"
+            options={{
+              tabBarButton: (props) => null,
+              headerShown: false,
+            }}
+          />
         </Tabs>
       </>
     );

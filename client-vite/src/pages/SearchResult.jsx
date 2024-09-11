@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { searchProducts } from '../actions/productsActions';
-import { FeaturedProducts } from '../components';
+import { FeaturedProducts, Spinner } from '../components';
 
 const SearchResults = () => {
   const { query } = useParams(); 
@@ -65,7 +65,7 @@ const SearchResults = () => {
       </div>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading...</p>
+        <p className="text-center text-gray-500"><Spinner /></p>
       ) : error ? (
         <p className="text-center text-red-500">Error: {error}</p>
       ) : products && products.length > 0 ? (
