@@ -6,6 +6,7 @@ import Myaccount from "./Myaccount";
 import Footer from "./Footer";
 import NotFound from "./NotFound";
 import Carousel from "./Carousel";
+import Banner from "./Banner";
 
 export{
     Navbar,
@@ -15,5 +16,6 @@ export{
     Myaccount,
     NotFound,
     Footer,
-    Carousel
+    Carousel,
+    Banner
 }

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+    "aos": "^2.3.4",
     "axios": "^1.7.3",
     "flowbite": "^2.5.1",
     "framer-motion": "^11.3.24",

@@ -19,14 +19,14 @@ const CategoryDetail = () => {
     }, [dispatch, slug])
     
   return (
-    <div className='max-w-7xl mx-auto pt-10 pb-20 mb-64'>
+    <div className='container mx-auto pt-10 pb-20 mb-64'>
         <h1 className='text-gray-700 text-4xl font-bold flex items-center justify-center'>{category.title}</h1>
         <div className='mx-3'>
             {loading && <Spinner/>}
             <div>{error ? <div className='bg-grade px-2 py-1.5 rounded-lg text-white'>{error}</div> :
             <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 '>
                 {products && products.map((product)=> 
-                <div key={product.id} className=''>
+                <div key={product.id} className='flex'>
                     <Link to={`/product/${category.slug}/${product.slug}/`} className='text-gray-700 hover:text-gray-500'>
                     <FeaturedProducts product={product}/>
                     </Link>
