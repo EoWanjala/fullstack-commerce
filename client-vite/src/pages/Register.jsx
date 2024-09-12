@@ -24,7 +24,7 @@ const Register = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/login');
     }
   }, [navigate, userInfo]);
 

@@ -16,7 +16,7 @@ const signup = () => {
 
     useEffect(() =>{
         if(userInfo){
-            router.replace('/home')
+            router.replace('/login')
         }
     }, [router, userInfo])
 

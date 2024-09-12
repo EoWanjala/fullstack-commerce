@@ -135,6 +135,13 @@ const TabIcon = ({ icon, color, name, focused, cartItemsCount }) => {
               headerShown: false,
             }}
           />
+          <Tabs.Screen
+            name="category/[slug]"
+            options={{
+              tabBarButton: (props) => null,
+              headerShown: false,
+            }}
+          />
         </Tabs>
       </>
     );

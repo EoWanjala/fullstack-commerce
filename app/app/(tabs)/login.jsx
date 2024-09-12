@@ -20,7 +20,7 @@ const SignIn = () => {
     dispatch(login(username, password));
   };
 
-  if (!userInfo) {
+  if (!userInfo.access) {
     return (
       <SafeAreaView className='h-full bg-white'>
         <ScrollView>

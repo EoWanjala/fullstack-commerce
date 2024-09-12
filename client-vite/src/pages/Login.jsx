@@ -19,7 +19,7 @@ const Login = () => {
         e.preventDefault();
         dispatch(login(username, password))
     }
-    if (!userInfo) {
+    if (!userInfo.access) {
         return (
             <div className='flex pt-20 max-w-7xl min-h-screen mx-auto pb-20'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 border md:border-gray-300 border-transparent shadow-lg rounded-lg ring-orange-600 w-full'>

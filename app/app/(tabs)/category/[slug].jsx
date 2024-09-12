@@ -1,10 +1,10 @@
 import { View, Text, FlatList } from 'react-native';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryDetail } from '../../actions/productsActions';
+import { getCategoryDetail } from '../../../actions/productsActions';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Spinner from '../../components/Spinner';
-import FeaturedProducts from '../../components/FeaturedProducts';
+import Spinner from '../../../components/Spinner';
+import FeaturedProducts from '../../../components/FeaturedProducts';
 import { useLocalSearchParams } from 'expo-router';
 
 const CategoryDetailScreen = () => {
