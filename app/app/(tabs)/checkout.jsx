@@ -58,7 +58,7 @@ const Checkout = () => {
             // paystackSecretKey='sk_test_f81f0539d6571ce92bee4b31f2e9e4c2079d2944'
             amount={paymentData.payment.amount } 
             billingEmail={paymentData.payment.email}
-            billingName={userInfo.username}
+            billingName={userInfo?.username}
             refNumber={paymentData.payment.ref}
             currency="KES"
             onSuccess={handlePaymentSuccess}

@@ -3,26 +3,29 @@ import {
     USER_LOGIN_REQUEST,
     USER_LOGIN_FAIL,
     USER_LOGOUT,
-
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
     USER_REGISTER_FAIL
+} from "../constant/index";
 
-} from "../constant/index"
-
-import axios from "axios"
-
+import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from "expo-router";
 
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-const apiUrl  = process.env.EXPO_PUBLIC_API_URL
+// Helper function to handle expired tokens
+const handleTokenExpiration = async (dispatch) => {
+    alert("Session expired. Please log in again.");
+    await AsyncStorage.removeItem('userInfo'); // Remove user data
+    dispatch({ type: USER_LOGOUT });
+    router.replace("/login");
+};
 
 // Login
 export const login = (username, password) => async (dispatch) => {
     try {
-        dispatch({
-            type: USER_LOGIN_REQUEST
-        });
+        dispatch({ type: USER_LOGIN_REQUEST });
 
         const config = {
             headers: {
@@ -32,7 +35,7 @@ export const login = (username, password) => async (dispatch) => {
 
         const { data } = await axios.post(
             `${apiUrl}/userprofile/login/`,
-            { 'username': username, 'password': password },
+            { username, password },
             config
         );
 
@@ -42,21 +45,25 @@ export const login = (username, password) => async (dispatch) => {
         });
 
         await AsyncStorage.setItem('userInfo', JSON.stringify(data)); // Store data using AsyncStorage
-
     } catch (error) {
-        dispatch({
-            type: USER_LOGIN_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
-        });
+        // Check if the error is due to an invalid or expired token
+        if (error.response && error.response.data.code === "token_not_valid") {
+            handleTokenExpiration(dispatch);
+        } else {
+            dispatch({
+                type: USER_LOGIN_FAIL,
+                payload: error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
+            });
+        }
     }
 };
 
-// logout
+// Logout
 export const logout = () => async (dispatch) => {
-    await AsyncStorage.removeItem('userInfo'); // Remove data using AsyncStorage
-    dispatch({
-        type: USER_LOGOUT
-    });
+    await AsyncStorage.removeItem('userInfo'); // Remove user data using AsyncStorage
+    dispatch({ type: USER_LOGOUT });
 };
 
 // Register
@@ -70,8 +77,16 @@ export const register = (username, first_name, last_name, email, password, confi
             }
         };
 
-        const { data } = await axios.post(`${apiUrl}/userprofile/register/`,
-            { 'username': username, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password': password, "confirm_password": confirm_password },
+        const { data } = await axios.post(
+            `${apiUrl}/userprofile/register/`,
+            {
+                username,
+                first_name,
+                last_name,
+                email,
+                password,
+                confirm_password
+            },
             config
         );
 
@@ -86,14 +101,16 @@ export const register = (username, first_name, last_name, email, password, confi
         });
 
         await AsyncStorage.setItem('userInfo', JSON.stringify(data)); // Store data using AsyncStorage
-
     } catch (error) {
-        dispatch({
-            type: USER_REGISTER_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
-        });
+        if (error.response && error.response.data.code === "token_not_valid") {
+            handleTokenExpiration(dispatch);
+        } else {
+            dispatch({
+                type: USER_REGISTER_FAIL,
+                payload: error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
+            });
+        }
     }
 };
-
-  
-  

@@ -96,19 +96,4 @@ export const clearCart = () => async(dispatch) => {
 
 }
 
-export const fetchCart = () => async (dispatch) => {
-    try {
-      dispatch({ type: CART_FETCH_REQUEST });
-      const response = await axios.get(`${API_URL}/api/cart/`);
-      console.log("Response data: ", response.data);
-      dispatch({
-        type: CART_FETCH_SUCCESS,
-        payload: response.data.cart, // Ensure payload is the cart array
-      });
-    } catch (error) {
-      dispatch({
-        type: CART_FETCH_FAIL,
-        payload: error.response ? error.response.data : error.message,
-      });
-    }
-  };
+

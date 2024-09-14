@@ -16,8 +16,12 @@ const MyAccount = () => {
   const { orders, loading:loadingOrders, error: errorOrders } = getAllOrdersReducer
 
   useEffect(()=> {
-    dispatch(getOrders())
-  }, [dispatch])
+    if (errorOrders && errorOrders.code === "token_not_valid") {
+      Alert.alert("Error", "Your session has expired. Please login again.");
+      dispatch(logout());
+      router.replace('/login')
+    }
+  }, [errorOrders,dispatch])
 
   const handlelogout = () => {
     dispatch(logout())

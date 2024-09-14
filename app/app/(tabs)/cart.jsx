@@ -2,11 +2,12 @@ import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { addToCart, removeFromCart } from '../../actions/cartActions'
 import Spinner from '../../components/Spinner'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { initiatePayment } from "../../actions/paymentActions"
 import { router } from "expo-router"
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
+import { logout } from '../../actions/userActions'
 
 const CartItem = ({ item }) => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -72,7 +73,7 @@ const Cart = () => {
   const { paymentData, loading: paymentLoading, error: paymentError } = paymentReducer;
 
   const userLoginReducer = useSelector(state => state.userLoginReducer);
-  const { userInfo } = userLoginReducer;
+  const { userInfo, error:Usererror } = userLoginReducer;
 
   const [firstName, setFirstName] = useState(userInfo?.first_name || "");
   const [lastName, setLastName] = useState(userInfo?.last_name || "");
@@ -98,7 +99,21 @@ const Cart = () => {
     return true;
   };
 
+  useEffect(() => {
+    if (paymentError?.code === "token_not_valid") {
+      alert("Session expired. Please log in again.");
+      dispatch(logout());
+    }
+  }, [Usererror]);
+
   const handleCheckout = () => {
+    if ( paymentError) {
+      alert("You need to log in to proceed to checkout.");
+      dispatch(logout());
+      router.replace('/login')
+      return;
+    }
+
     if (!validateForm()) {
       setFormError("Please fill in all the required fields.");
       return;
