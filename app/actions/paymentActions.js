@@ -28,7 +28,6 @@ export const initiatePayment = (orderData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post(`${API_URL}/payment/initiate-payment/`, orderData, config);
-
     dispatch({
       type: INITIATE_PAYMENT_SUCCESS,
       payload: data,

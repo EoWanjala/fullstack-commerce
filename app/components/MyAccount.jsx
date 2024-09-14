@@ -16,12 +16,13 @@ const MyAccount = () => {
   const { orders, loading:loadingOrders, error: errorOrders } = getAllOrdersReducer
 
   useEffect(()=> {
-    if (errorOrders && errorOrders.code === "token_not_valid") {
-      Alert.alert("Error", "Your session has expired. Please login again.");
-      dispatch(logout());
-      router.replace('/login')
+    if (!userInfo.access && userInfo.code === "token_not_valid"){
+      alert("User session expired, Please login!!")
+      dispatch(logout()) 
     }
-  }, [errorOrders,dispatch])
+
+    dispatch(getOrders())
+  }, [dispatch])
 
   const handlelogout = () => {
     dispatch(logout())
@@ -33,7 +34,10 @@ const MyAccount = () => {
       {loading ? (
         <ActivityIndicator size="large" color="#FFC107" />
       ) : error ? (
-        <Text className = 'text-white bg-red-500 px-1.5 py-2 rounded-lg text-lg font-pmedium'>{error}</Text>
+        <>
+          <Text className = 'text-white bg-red-500 px-1.5 py-2 rounded-lg text-lg font-pmedium'>{error}</Text>
+          <Text className = 'text-white bg-red-500 px-1.5 py-2 rounded-lg text-lg font-pmedium'>{errorOrders}</Text>
+        </>
       ) : (
         <>
           <Text className='text-3xl font-pbold mt-10'>My Account</Text>

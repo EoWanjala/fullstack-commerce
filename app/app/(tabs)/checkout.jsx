@@ -4,21 +4,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import Spinner from '../../components/Spinner';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import { clearCart } from '../../actions/cartActions';
 
 const Checkout = () => {
+  const dispatch = useDispatch()
   const [showPaystack, setShowPaystack] = useState(false); // State to show the Paystack component
   const paystackWebViewRef = useRef(paystackProps.PayStackRef);
 
   const paymentReducer = useSelector((state) => state.initiatePaymentReducer);
   const { paymentData, loading, error } = paymentReducer;
-  console.log('Payment data: ', paymentData);
+
 
   const userLogin = useSelector((state) => state.userLoginReducer);
   const { userInfo } = userLogin;
 
   const cartReducer = useSelector((state) => state.cartReducer);
   const { cartItems } = cartReducer;
-  console.log('Cart Items: ', cartItems);
+ 
 
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -30,7 +32,9 @@ const Checkout = () => {
   };
 
   const handlePaymentSuccess = (ref) => {
-    router.replace(`/verify-payment/${ref}`);
+    Alert.alert(`Payment successfull for payment KES ${paymentData.payment.amount}`)
+    dispatch(clearCart());
+    router.replace(`/home`);
   };
 
   return (
