@@ -18,6 +18,8 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_FILE = BASE_DIR / '.env'
 
+
+
 # Initialize environment variables
 env = environ.Env()
 environ.Env.read_env(ENV_FILE)
@@ -68,6 +70,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 
@@ -233,4 +238,6 @@ CORS_ALLOW_HEADERS = [
     'X-CSRFToken',
     'Accept',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
