@@ -3,10 +3,8 @@ asgiref==3.8.1
 baron==0.10.1
 dj-database-url==2.2.0
 dj-email-url==1.0.6
-
 django-environ>=0.4.5
-slugify
-
+django-autoslug
 django-cache-url==3.4.5
 django-cors-headers==4.4.0
 django-environs==0.1.1
@@ -29,4 +27,6 @@ tzdata==2024.1
 Django>=<4.2
 gunicorn
 django-cors-headers
+requests
+xhtml2pdf
 
