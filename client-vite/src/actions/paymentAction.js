@@ -8,7 +8,9 @@ import {
   VERIFY_PAYMENT_FAIL,
 } from '../constants/index';
 
-const API_URL = import.meta.env.VITE_BACKEND_API;
+//const API_URL = import.meta.env.VITE_BACKEND_API;
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:8000/api';
+
 
 // Initiate Payment Action
 export const initiatePayment = (orderData) => async (dispatch, getState) => {

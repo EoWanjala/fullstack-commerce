@@ -11,8 +11,10 @@ import {
 
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_BACKEND_API;
+//const API_URL = import.meta.env.VITE_BACKEND_API;
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:8000/api';
   
+
 // Login
 export const login = (username, password) => async (dispatch) => {
   try {

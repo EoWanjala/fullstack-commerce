@@ -22,7 +22,7 @@ const Navbar = () => {
     console.log("User Info:", userInfo)
     const categoryListReducer = useSelector((state) => state.categoryListReducer);
     const { categories } = categoryListReducer;
-    // console.log("Categories:", categories)
+    console.log("Categories:", categories)
 
     useEffect(() => {
         dispatch(listCategories());
@@ -151,9 +151,9 @@ const Navbar = () => {
                 <Link to={'/'}>
                     <p className='text-white text-md font-medium my-3'>Home</p>
                 </Link>
-                {categories.map(category => (
-                        <Link key={category.slug} to={`/category/${category.slug}`}>
-                            <p className='text-white text-md font-medium my-3'>{category.title}</p>
+                {categories?.map(category => (
+                        <Link key={category?.slug} to={`/category/${category?.slug}`}>
+                            <p className='text-white text-md font-medium my-3'>{category?.title}</p>
                         </Link>
                     ))}
                 <Link to={'/contact'}>

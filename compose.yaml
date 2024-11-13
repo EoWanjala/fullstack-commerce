@@ -1,0 +1,75 @@
+# version: '3.8'
+
+# services:
+#   # Backend service
+#   web:
+#     build: .
+#     command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8000:8000"
+#     environment:
+#       - DEBUG=True  # Set to False in production
+#     networks:
+#       - app-network
+
+#   # Frontend service
+#   vite-app:
+#     build:
+#       context: ./client-vite
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8080:80"  # Expose frontend on port 8080
+#     depends_on:
+#       - web  # Ensure backend starts first
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+version: '3.8'
+
+services:
+  # Frontend Vite app
+  vite-app:
+    build:
+      context: ./client-vite
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"  # Vite app runs on port 80 in the container
+    networks:
+      - app-network
+
+  # Backend Django app
+  web:
+    build: ./backend
+    command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"  # Backend Django app
+    environment:
+      - DEBUG=True  # Set to False for production
+    networks:
+      - app-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8081:80"  # Expose Nginx on port 8081
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Mount the nginx config file
+    depends_on:
+      - vite-app
+      - web
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
